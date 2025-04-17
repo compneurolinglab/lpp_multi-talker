@@ -95,22 +95,9 @@ design_matrix = pd.DataFrame([1]*len(betas),columns=['intercept'])
 second_level_model = SecondLevelModel(smoothing_fwhm=8,n_jobs=4)
 second_level_model.fit(betas,design_matrix=design_matrix)
 zmap = second_level_model.compute_contrast(second_level_contrast='intercept',output_type='z_score')
-zmap_data = zmap.get_fdata()
-zmap_data = -zmap_data
-zmap = nib.Nifti1Image(zmap_data,beta.affine)
+
 stat_map = cluster_level_inference(zmap,threshold=6,alpha=0.001)
 stat_map_resampled = resample_to_img(stat_map,gray_matter_mask,interpolation='nearest')
 x = stat_map_resampled.get_fdata()*gray_matter_mask.get_fdata()
 x = nib.Nifti1Image(x,affine=gray_matter_mask.affine)
-
-clists={'f0':'#f4bd0b','intensity':'#68ae67','word':'#7d4f8c'}
-cmap = LinearSegmentedColormap.from_list('%s'%group,['white',clists['%s'%group]])
-
-fig = plt.figure()
-display = plotting.plot_stat_map(x,display_mode='z',vmax=1,
-																																	black_bg=False,cmap=cmap,
-																																	cut_coords=[-10,0,10,20,30,40],
-																																	symmetric_cbar=False)
-display.savefig('Results/glm/%s_%s.png' %(session,group))
 nib.save(x,'Results/glm/cluster_%s_%s.nii' %(session,group))
-plotting.show()  

@@ -16,7 +16,6 @@ DIR = '/scratch/ResearchGroups/lt_jixingli/lpp_multitalker/'
 os.chdir(DIR)
 i = int(sys.argv[1])-1
 
-
 bad_types = ['bad_by_nan', 'bad_by_flat', 'bad_by_deviation', 'bad_by_hf_noise', 
              'bad_by_correlation', 'bad_by_SNR', 'bad_by_dropout', 'bad_by_ransac']
 sub_cha = []
@@ -48,9 +47,6 @@ except Exception:
     continue
 sub_cha_df = pd.DataFrame(sub_cha, columns=['subject', 'bad_type', 'channels'])
 sub_cha_df.to_csv('bad_channels.csv' , index=False)
-
-
-
 
 #ica
 try: 

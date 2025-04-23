@@ -32,6 +32,4 @@ corr = np.nan_to_num(zscore(corr,axis=0,nan_policy='omit'))
 
 # spatiotemporal clustering
 cor_exp = np.expand_dims(corr.T,axis=1)
-t_val, clusters, p_val, H0 = spatio_temporal_cluster_1samp_test(
-																													cor_exp, n_permutations=10000, 
-																													adjacency=adjacency, tail=1)
+t_val, clusters, p_val, H0 = spatio_temporal_cluster_1samp_test(cor_exp,n_permutations=10000,adjacency=adjacency,tail=1)

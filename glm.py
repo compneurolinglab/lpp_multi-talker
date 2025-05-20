@@ -4,18 +4,13 @@ import nibabel as nib
 import numpy as np
 import pandas as pd
 import nilearn
-import pickle
 from numpy import genfromtxt
 from scipy.stats import zscore
 from nilearn.image import resample_to_img
 from nilearn.datasets import load_mni152_gm_mask
-from nilearn import image, datasets, surface, plotting
 from nilearn.glm.first_level import FirstLevelModel
 from nilearn.glm.second_level import SecondLevelModel
 from nilearn.glm import threshold_stats_img, cluster_level_inference
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 
 DIR = '/scratch/ResearchGroups/lt_jixingli/lpp_multitalker/'
 os.chdir(DIR)
@@ -95,7 +90,6 @@ design_matrix = pd.DataFrame([1]*len(betas),columns=['intercept'])
 second_level_model = SecondLevelModel(smoothing_fwhm=8,n_jobs=4)
 second_level_model.fit(betas,design_matrix=design_matrix)
 zmap = second_level_model.compute_contrast(second_level_contrast='intercept',output_type='z_score')
-
 stat_map = cluster_level_inference(zmap,threshold=6,alpha=0.001)
 stat_map_resampled = resample_to_img(stat_map,gray_matter_mask,interpolation='nearest')
 x = stat_map_resampled.get_fdata()*gray_matter_mask.get_fdata()
